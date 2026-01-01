@@ -3,15 +3,9 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import { Mail, Phone, MapPin, Send, Linkedin, Twitter, Instagram, Youtube } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Gift, Calendar, User } from "lucide-react";
 
 const contactInfo = [
-  {
-    icon: Mail,
-    label: "Email",
-    value: "hello@animator.pro",
-    href: "mailto:hello@animator.pro",
-  },
   {
     icon: Phone,
     label: "Телефон",
@@ -19,18 +13,28 @@ const contactInfo = [
     href: "tel:+79991234567",
   },
   {
+    icon: Mail,
+    label: "Email",
+    value: "hello@prazdnik.ru",
+    href: "mailto:hello@prazdnik.ru",
+  },
+  {
     icon: MapPin,
-    label: "Локация",
-    value: "Москва, Россия",
+    label: "Офис",
+    value: "Москва, ул. Веселая, 1",
     href: "#",
   },
 ];
 
-const socialLinks = [
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Youtube, href: "#", label: "YouTube" },
+const themes = [
+  "Не определились",
+  "Пиратская вечеринка",
+  "Принцессы Disney",
+  "Супергерои",
+  "Научное шоу",
+  "Бумажная дискотека",
+  "Квест-приключение",
+  "Другое",
 ];
 
 export default function Contact() {
@@ -38,35 +42,23 @@ export default function Contact() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
-    subject: "",
+    phone: "",
+    theme: "Не определились",
+    date: "",
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<{[key: string]: string}>({});
 
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const validateForm = (): boolean => {
     const newErrors: {[key: string]: string} = {};
 
     if (formData.name.trim().length < 2) {
-      newErrors.name = "Имя должно содержать минимум 2 символа";
+      newErrors.name = "Как к вам обращаться?";
     }
 
-    if (!validateEmail(formData.email)) {
-      newErrors.email = "Введите корректный email адрес";
-    }
-
-    if (formData.subject.trim().length < 3) {
-      newErrors.subject = "Тема должна содержать минимум 3 символа";
-    }
-
-    if (formData.message.trim().length < 10) {
-      newErrors.message = "Сообщение должно содержать минимум 10 символов";
+    if (formData.phone.trim().length < 10) {
+      newErrors.phone = "Укажите номер телефона";
     }
 
     setErrors(newErrors);
@@ -84,106 +76,96 @@ export default function Contact() {
     try {
       // Симуляция отправки формы
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      alert("Спасибо! Ваше сообщение отправлено. Я свяжусь с вами в ближайшее время.");
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      alert("Ура! Заявка отправлена. Мы скоро позвоним, чтобы обсудить праздник!");
+      setFormData({ name: "", phone: "", theme: "Не определились", date: "", message: "" });
       setErrors({});
     } catch (error) {
-      alert("Произошла ошибка при отправке. Пожалуйста, попробуйте позже.");
+      alert("Ой, что-то пошло не так. Позвоните нам!");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    // Очистка ошибки при изменении поля
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
-      setErrors({ ...errors, [name]: "" });
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
   };
 
   return (
-    <section
-      id="contact"
-      className="section-padding bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 dark:from-purple-950 dark:via-pink-950 dark:to-blue-950"
-      ref={ref}
-    >
-      <div className="container-custom">
+    <section id="contact" className="section-padding bg-white dark:bg-gray-900 relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-0 left-0 w-64 h-64 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="absolute bottom-0 right-0 w-64 h-64 bg-accent-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 translate-x-1/2 translate-y-1/2"></div>
+
+      <div className="container-custom relative z-10" ref={ref}>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              Свяжитесь со мной
-            </span>
+          <div className="inline-block mb-4">
+             <span className="py-2 px-4 rounded-full bg-accent-100 text-accent-800 font-bold text-sm uppercase tracking-wider">
+               Контакты
+             </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+            Заказать <span className="text-primary">праздник</span>
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Готов обсудить ваш проект и воплотить идеи в жизнь
+            Оставьте заявку, и мы перезвоним в течение 15 минут, чтобы обсудить детали!
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-12 items-start">
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
             transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-8"
           >
-            <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-              Контактная информация
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-8">
-              Свяжитесь со мной любым удобным способом. Отвечу в течение 24 часов.
-            </p>
-
-            <div className="space-y-6 mb-8">
-              {contactInfo.map((item, index) => (
-                <motion.a
-                  key={index}
-                  href={item.href}
-                  className="flex items-center gap-4 p-4 rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow group"
-                  whileHover={{ x: 10 }}
-                >
-                  <div className="p-3 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600">
-                    <item.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      {item.label}
-                    </div>
-                    <div className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                      {item.value}
-                    </div>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-
-            {/* Social Links */}
-            <div>
-              <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                Социальные сети
-              </h4>
-              <div className="flex gap-4">
-                {socialLinks.map((social, index) => (
-                  <motion.a
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-xl border-2 border-transparent hover:border-primary/20 transition-all">
+              <h3 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Мы на связи!</h3>
+              <div className="space-y-6">
+                {contactInfo.map((item, index) => (
+                  <a
                     key={index}
-                    href={social.href}
-                    className="p-3 rounded-lg bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow"
-                    whileHover={{ scale: 1.1, y: -5 }}
-                    whileTap={{ scale: 0.9 }}
-                    aria-label={social.label}
+                    href={item.href}
+                    className="flex items-center gap-4 text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-primary transition-colors group"
                   >
-                    <social.icon className="w-6 h-6 text-purple-600" />
-                  </motion.a>
+                    <div className="w-12 h-12 bg-primary-50 dark:bg-primary-900/20 rounded-full flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                      <item.icon size={24} />
+                    </div>
+                    <div>
+                      <p className="text-sm text-gray-400 dark:text-gray-500 font-medium">{item.label}</p>
+                      <p className="text-lg font-bold">{item.value}</p>
+                    </div>
+                  </a>
                 ))}
               </div>
+            </div>
+
+            <div className="bg-gradient-to-br from-secondary to-secondary-600 p-8 rounded-3xl shadow-xl text-white relative overflow-hidden">
+               <div className="absolute top-0 right-0 p-4 opacity-20">
+                 <Gift size={100} />
+               </div>
+               <h3 className="text-2xl font-bold mb-4 relative z-10">Скидка 10%</h3>
+               <p className="mb-6 relative z-10">
+                 При заказе праздника в будний день (пн-чт) дарим скидку на любую программу!
+               </p>
+               <div className="inline-block bg-white/20 backdrop-blur-md px-4 py-2 rounded-lg font-mono font-bold">
+                 PROMO: BUDNI
+               </div>
             </div>
           </motion.div>
 
@@ -192,141 +174,128 @@ export default function Contact() {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
             transition={{ duration: 0.6, delay: 0.4 }}
+            className="bg-white dark:bg-gray-800 p-8 md:p-10 rounded-3xl shadow-2xl"
           >
-            <form
-              onSubmit={handleSubmit}
-              className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl"
-            >
-              <div className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >
-                    Ваше имя
-                  </label>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+                  Ваше имя
+                </label>
+                <div className="relative">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                   <input
                     type="text"
-                    id="name"
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    required
-                    className={`w-full px-4 py-3 rounded-lg border ${
+                    placeholder="Мама Анна"
+                    className={`w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border-2 outline-none transition-all ${
                       errors.name
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
-                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all`}
-                    placeholder="Иван Иванов"
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-gray-100 dark:border-gray-700 focus:border-primary"
+                    }`}
                   />
-                  {errors.name && (
-                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                      {errors.name}
-                    </p>
-                  )}
                 </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.email
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
-                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all`}
-                    placeholder="ivan@example.com"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                      {errors.email}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >
-                    Тема
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.subject
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
-                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all`}
-                    placeholder="Тема сообщения"
-                  />
-                  {errors.subject && (
-                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                      {errors.subject}
-                    </p>
-                  )}
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-                  >
-                    Сообщение
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                    className={`w-full px-4 py-3 rounded-lg border ${
-                      errors.message
-                        ? "border-red-500 focus:ring-red-500"
-                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
-                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all resize-none`}
-                    placeholder="Расскажите о вашем проекте..."
-                  />
-                  {errors.message && (
-                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                      {errors.message}
-                    </p>
-                  )}
-                </div>
-
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {isSubmitting ? (
-                    "Отправка..."
-                  ) : (
-                    <>
-                      Отправить сообщение
-                      <Send size={20} />
-                    </>
-                  )}
-                </motion.button>
+                {errors.name && (
+                  <p className="text-red-500 text-sm ml-1">{errors.name}</p>
+                )}
               </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+                  Телефон
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="+7 (999) 000-00-00"
+                    className={`w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border-2 outline-none transition-all ${
+                      errors.phone
+                        ? "border-red-500 focus:border-red-500"
+                        : "border-gray-100 dark:border-gray-700 focus:border-primary"
+                    }`}
+                  />
+                </div>
+                {errors.phone && (
+                  <p className="text-red-500 text-sm ml-1">{errors.phone}</p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+                    Тематика
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="theme"
+                      value={formData.theme}
+                      onChange={handleChange}
+                      className="w-full pl-4 pr-10 py-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border-2 border-gray-100 dark:border-gray-700 focus:border-primary outline-none appearance-none cursor-pointer"
+                    >
+                      {themes.map((theme) => (
+                        <option key={theme} value={theme}>
+                          {theme}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-500">
+                      ▼
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+                    Дата праздника
+                  </label>
+                  <div className="relative">
+                    <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
+                      className="w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border-2 border-gray-100 dark:border-gray-700 focus:border-primary outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1">
+                  Пожелания (необязательно)
+                </label>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Сколько будет детей? Где планируете отмечать?"
+                  rows={3}
+                  className="w-full px-4 py-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border-2 border-gray-100 dark:border-gray-700 focus:border-primary outline-none resize-none"
+                />
+              </div>
+
+              <motion.button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-4 bg-gradient-to-r from-primary to-primary-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2 group"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                {isSubmitting ? (
+                  "Отправка..."
+                ) : (
+                  <>
+                    <Send size={20} className="group-hover:translate-x-1 transition-transform" />
+                    Отправить заявку
+                  </>
+                )}
+              </motion.button>
             </form>
           </motion.div>
         </div>

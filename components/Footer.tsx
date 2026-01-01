@@ -6,27 +6,24 @@ import { Heart, Linkedin, Twitter, Instagram, Youtube, Mail, ArrowUp } from "luc
 const footerLinks = {
   navigation: [
     { name: "Главная", href: "#home" },
-    { name: "О себе", href: "#about" },
-    { name: "Портфолио", href: "#portfolio" },
-    { name: "Опыт", href: "#experience" },
+    { name: "Программы", href: "#programs" },
+    { name: "Галерея", href: "#gallery" },
+    { name: "Отзывы", href: "#testimonials" },
   ],
   services: [
-    { name: "2D Анимация", href: "#portfolio" },
-    { name: "3D Анимация", href: "#portfolio" },
-    { name: "Моушн-дизайн", href: "#portfolio" },
-    { name: "VFX", href: "#portfolio" },
+    { name: "Дни рождения", href: "#programs" },
+    { name: "Выпускные", href: "#programs" },
+    { name: "Научное шоу", href: "#programs" },
+    { name: "Квесты", href: "#programs" },
   ],
   resources: [
-    { name: "Блог", href: "/blog" },
-    { name: "Навыки", href: "#skills" },
-    { name: "Отзывы", href: "#testimonials" },
+    { name: "Вопросы и ответы", href: "#faq" },
+    { name: "Политика конфиденциальности", href: "#privacy" },
     { name: "Контакты", href: "#contact" },
   ],
 };
 
 const socialLinks = [
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Twitter, href: "#", label: "Twitter" },
   { icon: Instagram, href: "#", label: "Instagram" },
   { icon: Youtube, href: "#", label: "YouTube" },
 ];
@@ -37,28 +34,27 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-gray-900 text-gray-300">
+    <footer className="bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
       <div className="container-custom section-padding">
         <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">
             <motion.a
               href="#home"
-              className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent inline-block mb-4"
+              className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent inline-block mb-4"
               whileHover={{ scale: 1.05 }}
             >
-              Animator
+              🎈 Праздник
             </motion.a>
-            <p className="text-gray-400 mb-6 max-w-sm">
-              Профессиональный аниматор, создающий визуальные истории, которые вдохновляют
-              и захватывают. Превращаю идеи в анимацию.
+            <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm">
+              Мы создаем волшебные моменты для ваших детей. Смех, радость и незабываемые впечатления гарантированы!
             </p>
             <div className="flex gap-4">
               {socialLinks.map((social, index) => (
                 <motion.a
                   key={index}
                   href={social.href}
-                  className="p-2 rounded-lg bg-gray-800 hover:bg-purple-600 transition-colors"
+                  className="p-3 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-primary hover:text-white transition-all"
                   whileHover={{ scale: 1.1, y: -3 }}
                   whileTap={{ scale: 0.9 }}
                   aria-label={social.label}
@@ -71,13 +67,13 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Навигация</h3>
+            <h3 className="text-gray-900 dark:text-white font-bold mb-4">Навигация</h3>
             <ul className="space-y-2">
               {footerLinks.navigation.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="hover:text-purple-400 transition-colors"
+                    className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
                   >
                     {link.name}
                   </a>
@@ -88,13 +84,13 @@ export default function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Услуги</h3>
+            <h3 className="text-gray-900 dark:text-white font-bold mb-4">Праздники</h3>
             <ul className="space-y-2">
               {footerLinks.services.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="hover:text-purple-400 transition-colors"
+                    className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
                   >
                     {link.name}
                   </a>
@@ -102,16 +98,16 @@ export default function Footer() {
               ))}
             </ul>
           </div>
-
+          
           {/* Resources */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Ресурсы</h3>
+            <h3 className="text-gray-900 dark:text-white font-bold mb-4">Информация</h3>
             <ul className="space-y-2">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="hover:text-purple-400 transition-colors"
+                    className="text-gray-600 dark:text-gray-400 hover:text-primary transition-colors"
                   >
                     {link.name}
                   </a>
@@ -121,66 +117,24 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter */}
-        <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-2xl p-8 mb-12">
-          <div className="grid md:grid-cols-2 gap-6 items-center">
-            <div>
-              <h3 className="text-2xl font-bold text-white mb-2">
-                Подпишитесь на рассылку
-              </h3>
-              <p className="text-gray-400">
-                Получайте советы по анимации и новости о новых проектах
-              </p>
-            </div>
-            <form className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Ваш email"
-                className="flex-1 px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
-              />
-              <motion.button
-                type="submit"
-                className="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg font-semibold flex items-center gap-2"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Mail size={20} />
-                Подписаться
-              </motion.button>
-            </form>
-          </div>
-        </div>
-
-        {/* Bottom */}
-        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-gray-800">
-          <p className="text-gray-400 mb-4 md:mb-0">
-            © 2024 Animator Portfolio. Сделано с{" "}
-            <Heart className="inline w-4 h-4 text-red-500 fill-current" /> для
-            креативных проектов
+        <div className="pt-8 border-t border-gray-100 dark:border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} Праздник. Все права защищены.
           </p>
-          <div className="flex gap-6">
-            <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-              Политика конфиденциальности
-            </a>
-            <a href="#" className="text-gray-400 hover:text-purple-400 transition-colors">
-              Условия использования
-            </a>
+          <div className="flex items-center gap-2 text-sm text-gray-500">
+            <span>Сделано с</span>
+            <Heart size={16} className="text-red-500 fill-red-500" />
+            <span>для детей</span>
           </div>
+          
+          <button 
+            onClick={scrollToTop}
+            className="p-3 bg-primary text-white rounded-full shadow-lg hover:shadow-xl hover:bg-primary-600 transition-all"
+          >
+            <ArrowUp size={20} />
+          </button>
         </div>
       </div>
-
-      {/* Scroll to top button */}
-      <motion.button
-        onClick={scrollToTop}
-        className="fixed bottom-8 right-8 p-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full shadow-lg z-40"
-        whileHover={{ scale: 1.1, y: -5 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <ArrowUp size={24} />
-      </motion.button>
     </footer>
   );
 }

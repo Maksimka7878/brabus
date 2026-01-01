@@ -4,13 +4,13 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Animator Portfolio - Professional Animation & Motion Design",
-  description: "Showcase of professional animation work, motion design, and creative projects",
-  keywords: ["animation", "motion design", "animator", "portfolio", "visual effects"],
-  authors: [{ name: "Professional Animator" }],
+  title: "Детский аниматор | Праздник для вашего ребенка",
+  description: "Организация детских праздников, дней рождения, выпускных. Веселые аниматоры, шоу программы и квесты.",
+  keywords: ["детский аниматор", "праздник", "день рождения", "шоу мыльных пузырей", "анимация"],
+  authors: [{ name: "Агентство Праздник" }],
   openGraph: {
-    title: "Animator Portfolio",
-    description: "Professional Animation & Motion Design Portfolio",
+    title: "Детский аниматор | Праздник для вашего ребенка",
+    description: "Организация детских праздников, дней рождения, выпускных.",
     type: "website",
   },
 };

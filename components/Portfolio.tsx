@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Play, ExternalLink } from "lucide-react";
+import Image from "next/image";
 
 const categories = ["Все", "2D анимация", "3D анимация", "Моушн-дизайн", "VFX"];
 
@@ -130,10 +131,11 @@ export default function Portfolio() {
               className="group relative rounded-2xl overflow-hidden shadow-lg bg-white dark:bg-gray-800"
             >
               <div className="relative aspect-video overflow-hidden">
-                <img
+                <Image
                   src={project.image}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
                   <motion.a

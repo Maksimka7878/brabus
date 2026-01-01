@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Calendar, Clock, Tag, Search } from "lucide-react";
 import { blogPosts } from "@/data/blogPosts";
 import Link from "next/link";
+import Image from "next/image";
 
 const categories = ["Все", "Обучение", "Инструменты", "Процесс", "Тренды", "Оптимизация", "Пост-продакшн"];
 
@@ -98,10 +99,11 @@ export default function BlogPage() {
                 >
                   <Link href={`/blog/${post.id}`}>
                     <div className="relative aspect-video overflow-hidden">
-                      <img
+                      <Image
                         src={post.image}
                         alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        fill
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute top-4 left-4">
                         <span className="px-4 py-2 bg-purple-600 text-white rounded-full text-sm font-medium">
@@ -148,10 +150,12 @@ export default function BlogPage() {
                     </div>
 
                     <div className="flex items-center gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <img
+                      <Image
                         src={post.author.avatar}
                         alt={post.author.name}
-                        className="w-10 h-10 rounded-full object-cover"
+                        width={40}
+                        height={40}
+                        className="rounded-full object-cover"
                       />
                       <span className="text-sm font-medium text-gray-900 dark:text-white">
                         {post.author.name}

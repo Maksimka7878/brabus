@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import Image from "next/image";
 
 const testimonials = [
   {
@@ -93,10 +94,12 @@ export default function Testimonials() {
 
             <div className="relative z-10">
               <div className="flex items-center gap-6 mb-6">
-                <img
+                <Image
                   src={testimonials[currentIndex].image}
                   alt={testimonials[currentIndex].name}
-                  className="w-20 h-20 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-lg"
+                  width={80}
+                  height={80}
+                  className="rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-lg"
                 />
                 <div>
                   <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
@@ -118,7 +121,7 @@ export default function Testimonials() {
               </div>
 
               <p className="text-lg md:text-xl text-gray-700 dark:text-gray-300 leading-relaxed">
-                "{testimonials[currentIndex].text}"
+                &ldquo;{testimonials[currentIndex].text}&rdquo;
               </p>
             </div>
           </motion.div>
@@ -178,13 +181,15 @@ export default function Testimonials() {
                   ))}
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
-                  "{testimonial.text}"
+                  &ldquo;{testimonial.text}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <img
+                  <Image
                     src={testimonial.image}
                     alt={testimonial.name}
-                    className="w-10 h-10 rounded-full object-cover"
+                    width={40}
+                    height={40}
+                    className="rounded-full object-cover"
                   />
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white text-sm">

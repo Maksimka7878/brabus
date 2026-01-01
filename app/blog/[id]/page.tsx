@@ -5,6 +5,7 @@ import { Calendar, Clock, Tag, ArrowLeft, Share2 } from "lucide-react";
 import { blogPosts } from "@/data/blogPosts";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 export default function BlogPostPage() {
   const params = useParams();
@@ -27,10 +28,12 @@ export default function BlogPostPage() {
     <div className="min-h-screen pt-20">
       {/* Hero */}
       <section className="relative h-[60vh] overflow-hidden">
-        <img
+        <Image
           src={post.image}
           alt={post.title}
-          className="w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
@@ -61,10 +64,12 @@ export default function BlogPostPage() {
 
               <div className="flex flex-wrap items-center gap-6 text-white/90">
                 <div className="flex items-center gap-3">
-                  <img
+                  <Image
                     src={post.author.avatar}
                     alt={post.author.name}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-white"
+                    width={48}
+                    height={48}
+                    className="rounded-full object-cover border-2 border-white"
                   />
                   <span className="font-medium">{post.author.name}</span>
                 </div>
@@ -142,10 +147,11 @@ export default function BlogPostPage() {
                   >
                     <div className="bg-gray-50 dark:bg-gray-800 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
                       <div className="relative aspect-video overflow-hidden">
-                        <img
+                        <Image
                           src={relatedPost.image}
                           alt={relatedPost.title}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
                         />
                       </div>
                       <div className="p-6">

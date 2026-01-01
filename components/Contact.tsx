@@ -43,21 +43,66 @@ export default function Contact() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: {[key: string]: string} = {};
+
+    if (formData.name.trim().length < 2) {
+      newErrors.name = "Имя должно содержать минимум 2 символа";
+    }
+
+    if (!validateEmail(formData.email)) {
+      newErrors.email = "Введите корректный email адрес";
+    }
+
+    if (formData.subject.trim().length < 3) {
+      newErrors.subject = "Тема должна содержать минимум 3 символа";
+    }
+
+    if (formData.message.trim().length < 10) {
+      newErrors.message = "Сообщение должно содержать минимум 10 символов";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return;
+    }
+
     setIsSubmitting(true);
-    // Симуляция отправки формы
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    alert("Спасибо! Ваше сообщение отправлено. Я свяжусь с вами в ближайшее время.");
-    setFormData({ name: "", email: "", subject: "", message: "" });
-    setIsSubmitting(false);
+    try {
+      // Симуляция отправки формы
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      alert("Спасибо! Ваше сообщение отправлено. Я свяжусь с вами в ближайшее время.");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setErrors({});
+    } catch (error) {
+      alert("Произошла ошибка при отправке. Пожалуйста, попробуйте позже.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    // Очистка ошибки при изменении поля
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
   };
 
   return (
@@ -167,9 +212,18 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      errors.name
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
+                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all`}
                     placeholder="Иван Иванов"
                   />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -186,9 +240,18 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      errors.email
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
+                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all`}
                     placeholder="ivan@example.com"
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -205,9 +268,18 @@ export default function Contact() {
                     value={formData.subject}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all"
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      errors.subject
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
+                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all`}
                     placeholder="Тема сообщения"
                   />
+                  {errors.subject && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors.subject}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -224,9 +296,18 @@ export default function Contact() {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-600 focus:border-transparent transition-all resize-none"
+                    className={`w-full px-4 py-3 rounded-lg border ${
+                      errors.message
+                        ? "border-red-500 focus:ring-red-500"
+                        : "border-gray-300 dark:border-gray-600 focus:ring-purple-600"
+                    } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:border-transparent transition-all resize-none`}
                     placeholder="Расскажите о вашем проекте..."
                   />
+                  {errors.message && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors.message}
+                    </p>
+                  )}
                 </div>
 
                 <motion.button

@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { blogPosts } from "@/data/blogPosts";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function BlogSection() {
   const ref = useRef(null);
@@ -47,10 +48,11 @@ export default function BlogSection() {
             >
               <Link href={`/blog/${post.id}`}>
                 <div className="relative aspect-video overflow-hidden">
-                  <img
+                  <Image
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute top-4 left-4">
                     <span className="px-3 py-1 bg-purple-600 text-white rounded-full text-sm font-medium">
